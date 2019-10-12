@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: wdt-test-static-deployment
+  namespace: wdt-test
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: wdt-static
+    spec:
+      containers:
+      - name: wdt-static-test
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /www/wdt-test/
+          name: test2-static-data
+        - mountPath: /etc/nginx/conf.d/
+          name: test2-static-etc
+      volumes:
+      - name: test2-static-data
+        persistentVolumeClaim:
+          claimName: wdt-test-static-pvc
+      - name: test2-static-etc
+        configMap:
+          name: wdt-nginx-conf

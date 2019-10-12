@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: vtsc-static-deployment
+  namespace: vtsc-test
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: vtsc-static
+    spec:
+      containers:
+      - name: vtsc-static
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /www/vtsc-test/
+          name: vtsc-static-data
+        - mountPath: /etc/nginx/conf.d/
+          name: vtsc-static-etc
+      volumes:
+      - name: vtsc-static-data
+        persistentVolumeClaim:
+          claimName: vtsc-test-static-pvc
+      - name: vtsc-static-etc
+        configMap:
+          name: vtsc-nginx-conf

@@ -1,0 +1,45 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: wdt-test-ingress
+  namespace: wdt-test
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    #nginx.ingress.kubernetes.io/force-ssl-redirect: "false"   
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/server-alias: "wdttest.banajava.com"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      rewrite /api/(.*)  /$1 break; 
+spec:
+  tls:
+  - hosts:
+    - wdtmtest.banajava.com
+    secretName: wdtmtest-ingress-tls-secret
+  rules:
+  - host: wdtmtest.banajava.com
+    http:
+      paths:
+      - path: /api/(stat|console)/
+        backend:
+          serviceName: wdt-test-stat-java-service
+          servicePort: 14000
+      - path: /api/tdmp/
+        backend:
+          serviceName: wdt-test-tdmp-java-service
+          servicePort: 16000
+      - path: /api/shortlinks/
+        backend:
+          serviceName: wdt-test-officialpc-java-service
+          servicePort: 15000
+      - path: /api/
+        backend:
+          serviceName: wdt-test-java-service
+          servicePort: 12000
+      - path: /(wdt-admin|wxmp|static|wdt-tdmp-admin|wdt-console)/
+        backend:
+          serviceName: wdt-static-service
+          servicePort: 80 
+      - path:
+        backend:
+          serviceName: wdt-test-pc-front-service 
+          servicePort: 3000

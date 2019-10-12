@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: wdt-pmp-test-static-deployment
+  namespace: wdt-pmp-test
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: wdt-pmp-static
+    spec:
+      containers:
+      - name: wdt-pmp-static-test
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /www/wdt-test/
+          name: wdt-pmp-static-data
+        - mountPath: /etc/nginx/conf.d/
+          name: wdt-pmp-static-etc
+      volumes:
+      - name: wdt-pmp-static-data
+        persistentVolumeClaim:
+          claimName: wdt-pmp-test-static-pvc
+      - name: wdt-pmp-static-etc
+        configMap:
+          name: wdt-pmp-nginx-conf

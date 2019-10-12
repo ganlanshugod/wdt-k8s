@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wdt-pmp-deployment
+  namespace: wdt-pmp-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wdt-pmp-java
+  template:
+    metadata:
+      labels:
+        app: wdt-pmp-java
+    spec:
+      containers:
+      - name: wdt-pmp-java
+        image: registry.banajava.com:5000/wdt-picminiprog-package:0.0.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 17000
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: 'test'
+      nodeSelector:
+        node-role.kubernetes.io/test: ''
+      imagePullSecrets:
+      - name: registrykey-banajava

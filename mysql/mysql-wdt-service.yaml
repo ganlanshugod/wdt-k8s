@@ -1,0 +1,9 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: wdt-mysql-service
+  namespace: wdt-test
+spec:
+  type: ExternalName
+  externalName: mysql.kube-public.svc.cluster.local
+

@@ -1,0 +1,113 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: wdt-test-deployment
+  namespace: wdt-test
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: wdt-java
+    spec:
+      containers:
+      - name: wdt-java-test
+        image: registry.banajava.com:5000/wdt-package:0.0.4
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 12000
+            scheme: HTTP
+          initialDelaySeconds: 90
+          timeoutSeconds: 10
+          successThreshold: 1
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 12000
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+        ports:
+        - containerPort: 12000
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: 'test'
+      nodeSelector:
+        node-role.kubernetes.io/test: ''
+      imagePullSecrets:
+      - name: registrykey-banajava
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: wdt-test-tdmp-deployment
+  namespace: wdt-test
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: wdt-tdmp-java
+    spec:
+      containers:
+      - name: wdt-tdmp-java-test
+        image: registry.banajava.com:5000/wdt-tdmp-package:0.0.3
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /tdmp/health
+            port: 16000
+            scheme: HTTP
+          initialDelaySeconds: 80
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /tdmp/health
+            port: 16000
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+        ports:
+        - containerPort: 16000
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: 'test'
+      nodeSelector:
+        node-role.kubernetes.io/test: ''
+      imagePullSecrets:
+      - name: registrykey-banajava
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: wdt-test-officialpc-deployment
+  namespace: wdt-test
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: wdt-officialpc-java
+    spec:
+      containers:
+      - name: wdt-officialpc-java-test
+        image: registry.banajava.com:5000/wdt-officialpc-package:0.0.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 15000
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: 'test'
+      nodeSelector:
+        node-role.kubernetes.io/test: ''
+      imagePullSecrets:
+      - name: registrykey-banajava  

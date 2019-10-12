@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: vtsc-test-ingress
+  namespace: vtsc-test
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      rewrite /api/(.*)  /$1 break; 
+spec:
+  rules:
+  - host: vtsctest.banajava.com
+    http:
+      paths:
+      - path: /api/(auth|aliLogin|miniLogin|codeLogin|bjqdLogin|deviceLogin|mpLogin|auth/logout|sysRole/|sysUser/|wct/)
+        backend:
+          serviceName: wdt-auth-service
+          servicePort: 12300
+      - path: /api/
+        backend:
+          serviceName: vtsc-package-service
+          servicePort: 12124
+      - path: /vtsc-admin/
+        backend:
+          serviceName: vtsc-static-service
+          servicePort: 80

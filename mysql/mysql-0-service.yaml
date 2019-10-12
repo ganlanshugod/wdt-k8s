@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+ name: mysql-0-svc
+ namespace: wdt-test
+spec:
+ ports:
+ - name: http
+   port: 3306
+   protocol: TCP
+   targetPort: 3306
+ sessionAffinity: None
+ type: ExternalName
+ externalName: mysql-0.mysql.kube-public.svc.cluster.local
+

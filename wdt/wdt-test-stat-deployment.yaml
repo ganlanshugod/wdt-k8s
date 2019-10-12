@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: wdt-test-stat-deployment
+  namespace: wdt-test
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: wdt-stat-java
+    spec:
+      containers:
+      - name: wdt-stat-java-test
+        image: registry.banajava.com:5000/wdt-stat-package:0.0.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 14000
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: 'test'
+      nodeSelector:
+        node-role.kubernetes.io/test: ''
+      imagePullSecrets:
+      - name: registrykey-banajava 

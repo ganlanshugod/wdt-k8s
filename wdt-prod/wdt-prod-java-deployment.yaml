@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wdt-prod-package-deployment
+  namespace: wdt-prod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wdt-prod-package
+  template:
+    metadata:
+      labels:
+        app: wdt-prod-package
+    spec:
+      containers:
+      - name: wdt-prod-package
+        image: registry.banajava.com:5000/wdt-tdmp-prod-package:0.0.2
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /tdmp/health
+            port: 16000
+            scheme: HTTP
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+          readinessProbe:
+        readinessProbe:
+          httpGet:
+            path: /tdmp/health
+            port: 16000
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+        ports:
+        - containerPort: 16000
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: 'prod'
+      nodeSelector:
+        node-role.kubernetes.io/prod: ''
+      imagePullSecrets:
+      - name: registrykey-banajava 

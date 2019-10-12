@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: wdt-pc-front-deployment
+  namespace: wdt-test
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: wdt-pc-front
+    spec:
+      containers:
+      - name: wdt-pc-front-test
+        image: registry.banajava.com:5000/wdt-pc-front:0.0.2
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        env:
+        - name: BASE_URL
+          value: 'http://wdtmtest.banajava.com/'
+      imagePullSecrets:
+      - name: registrykey-banajava

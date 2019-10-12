@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: npm-registry-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/server-alias: "maven.banajava.com"
+    kubernetes.io/ingress.class: "nginx-prod"
+spec:
+  rules:
+  - host: npm.banajava.com
+    http:
+      paths:
+      - path:
+        backend:
+          serviceName: npm-registry
+          servicePort: 8081

@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wdt-test-java-service
+  namespace: wdt-test
+spec:
+  selector:
+    app: wdt-java
+  ports:
+  - port: 12000
+    targetPort: 12000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wdt-test-stat-java-service
+  namespace: wdt-test
+spec:
+  selector:
+    app: wdt-stat-java
+  ports:
+  - port: 14000
+    targetPort: 14000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wdt-test-tdmp-java-service
+  namespace: wdt-test
+spec:
+  selector:
+    app: wdt-tdmp-java
+  ports:
+  - port: 16000
+    targetPort: 16000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wdt-test-officialpc-java-service
+  namespace: wdt-test
+spec:
+  selector:
+    app: wdt-officialpc-java
+  ports:
+  - port: 15000
+    targetPort: 15000   

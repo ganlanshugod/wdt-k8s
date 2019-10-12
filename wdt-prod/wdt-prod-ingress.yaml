@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: wdt-prod-ingress
+  namespace: wdt-prod
+  annotations:
+    kubernetes.io/ingress.class: "nginx-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      rewrite /api/(.*)  /$1 break; 
+spec:
+  tls:
+  - hosts:
+    - yunying.qingdaodujia.cn
+    secretName: yunying-ingress-tls-secret
+  rules:
+  - host: yunying.qingdaodujia.cn
+    http:
+      paths:
+      - path: /api/
+        backend:
+          serviceName: wdt-prod-package-service
+          servicePort: 16000
+      - path: /wdt-tdmp-admin/
+        backend:
+          serviceName: wdt-prod-tdmp-static-service
+          servicePort: 80

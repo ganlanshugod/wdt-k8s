@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vtsc-auth-deployment
+  namespace: vtsc-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vtsc-auth
+  template:
+    metadata:
+      labels:
+        app: vtsc-auth
+    spec:
+      containers:
+      - name: vtsc-auth
+        image: registry.banajava.com:5000/wdt-auth-package:0.0.2
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 12300
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: 'test'
+      nodeSelector:
+        node-role.kubernetes.io/test: ''
+      imagePullSecrets:
+      - name: registrykey-banajava
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vtsc-package-deployment
+  namespace: vtsc-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vtsc-package
+  template:
+    metadata:
+      labels:
+        app: vtsc-package
+    spec:
+      containers:
+      - name: vtsc-package
+        image: registry.banajava.com:5000/vtsc-package:0.0.2
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 12124
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: 'test'
+        volumeMounts:
+        - mountPath: /root/vtscfiles
+          name: vtsc-lr-data
+      volumes:
+      - name: vtsc-lr-data
+        persistentVolumeClaim:
+          claimName: vtsc-test-lr-pvc
+      nodeSelector:
+        node-role.kubernetes.io/test: ''
+      imagePullSecrets:
+      - name: registrykey-banajava 

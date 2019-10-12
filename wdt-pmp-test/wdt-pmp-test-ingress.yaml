@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: wdt-pmp-test-ingress
+  namespace: wdt-pmp-test
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/server-alias: "wdttest.banajava.com"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      rewrite /api/(.*)  /$1 break; 
+spec:
+  tls:
+  - hosts:
+    - wdtmtest.banajava.com
+    secretName: wdtmtest-ingress-tls-secret
+  rules:
+  - host: wdtmtest.banajava.com
+    http:
+      paths:
+      - path: /api/pmp/
+        backend:
+          serviceName: wdt-pmp-service
+          servicePort: 17000
+      - path: /wdt-pmp-admin/
+        backend:
+          serviceName: wdt-pmp-static-service
+          servicePort: 80

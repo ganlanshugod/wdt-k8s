@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: wdt-prod-tdmp-static-deployment
+  namespace: wdt-prod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wdt-prod-tdmp-static
+  template:
+    metadata:
+      labels:
+        app: wdt-prod-tdmp-static
+    spec:
+      containers:
+      - name: wdt-prod-tdmp-static
+        image: registry.banajava.com:5000/wdt-tdmp-admin:0.0.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+      nodeSelector:
+        node-role.kubernetes.io/prod: ''
+      imagePullSecrets:
+      - name: registrykey-banajava
