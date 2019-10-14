@@ -36,3 +36,5 @@ defaultBackend:
       - key: node-role.kubernetes.io/master
         operator: Exists
         effect: PreferNoSchedule
+tcp:
+  22: "gitlab/mygitlab-gitlab-shell:22"

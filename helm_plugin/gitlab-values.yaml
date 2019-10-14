@@ -3,6 +3,8 @@ global:
     domain: banajava.com
     hostSuffix: git
     https: false
+  ingress:
+    class: 'nginx'
 certmanager-issuer:
   email: liuwenjiegod@126.com
 prometheus:
@@ -10,7 +12,7 @@ prometheus:
 gitlab-runner:
   install: false
 nginx-ingress:
-  install: false
+  enabled: false
 postgresql:
   persistence:
     storageClass: alicloud-nas
