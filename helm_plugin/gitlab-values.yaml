@@ -1,0 +1,7 @@
+global:
+  hosts:
+    domain: banajava.com
+    hostSuffix: git
+    https: false
+certmanager-issuer:
+  email: liuwenjiegod@126.com
